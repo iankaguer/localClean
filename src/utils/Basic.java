@@ -1,8 +1,10 @@
 package utils;
 
+import java.awt.*;
+
 public class Basic {
-    String APP_BACKGROUND_COLOR = "#EDEDED";
-    String APP_FOREGROUND_COLOR = "#E3E3E3";
-    String SELECTED_CONTAINER = "dashboard";
-    String BASE_URL = "https://dummyjson.com";
+    public static final String APP_BACKGROUND_COLOR = "#EDEDED";
+    public static final String APP_FOREGROUND_COLOR = "#3e3e3e";
+    public static final String SELECTED_CONTAINER = "dashboard";
+    public static final String BASE_URL = "https://dummyjson.com";
 }

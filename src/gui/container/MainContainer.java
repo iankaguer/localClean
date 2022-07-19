@@ -7,6 +7,7 @@ import java.awt.*;
 public class MainContainer extends JPanel {
     public MainContainer() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(Color.WHITE);
         //add(new Dashboard());
     }
 

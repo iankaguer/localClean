@@ -8,7 +8,9 @@ import java.awt.*;
 public class BaseContainer extends JPanel {
     public BaseContainer() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(new Sidebar(),  BorderLayout.EAST);
-        add(new MainContainer(), BorderLayout.CENTER);
+        Sidebar sidebar = new Sidebar();
+        sidebar.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
+        add(sidebar,  BorderLayout.EAST);
+        add(new MainContainer(), BorderLayout.WEST);
     }
 }
