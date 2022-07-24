@@ -14,9 +14,9 @@ public class SelectedContainerObserver implements Observer {
     public void update(Observable obj, Object arg) {
         if (arg instanceof String) {
             Basic.SELECTED_CONTAINER = (String) arg;
-            System.out.println("NameObserver: Some other change to subject! " + Basic.SELECTED_CONTAINER);
+            System.out.println("Selected " + Basic.SELECTED_CONTAINER);
         } else {
-            System.out.println("NameObserver: Some other change to subject!");
+            System.out.println("No change");
         }
 
         if (Objects.equals(Basic.SELECTED_CONTAINER, "dashboard")) {

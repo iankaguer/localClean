@@ -24,7 +24,7 @@ public class BaseContainer extends JPanel {
        // sidebar.setBackground(Color.WHITE);
         add(sidebar,  BorderLayout.EAST);
         setBackground(Color.WHITE);
-        add(mainContainer, BorderLayout.WEST);
+        add(mainContainer, BorderLayout.CENTER);
     }
 }
 
