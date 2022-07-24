@@ -21,10 +21,11 @@ public class BaseContainer extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         Sidebar sidebar = new Sidebar(observable);
         sidebar.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
-       // sidebar.setBackground(Color.WHITE);
+        //mainContainer.setMaximumSize(new Dimension((Integer.MAX_VALUE - 200), Integer.MAX_VALUE));
+        //sidebar.setBackground(Color.WHITE);
         add(sidebar,  BorderLayout.EAST);
         setBackground(Color.WHITE);
-        add(mainContainer, BorderLayout.CENTER);
+        add(mainContainer, BorderLayout.WEST);
     }
 }
 
