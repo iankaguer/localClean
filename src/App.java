@@ -12,7 +12,8 @@ public class App {
             BaseContainer bc = new BaseContainer();
             //fenetre.setVisible(true);
             JFrame fenetre = new JFrame("LocalClean");
-            fenetre.setSize(1280, 1000);
+            bc.setLayout(new BoxLayout(bc, BoxLayout.X_AXIS));
+            fenetre.setSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
             fenetre.setBackground(Color.WHITE);
             fenetre.setVisible(true);
             fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

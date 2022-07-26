@@ -15,7 +15,7 @@ public class Sidebar extends JPanel {
     static SelectedContainerObservable observable;
     public Sidebar(SelectedContainerObservable observablex) {
         SidebarItem dashboardItem = new SidebarItem("Dashboard", "src/img/etude.png");
-        SidebarItem UtilisateurItem = new SidebarItem("Utilisateurs", "src/img/etude.png");
+        SidebarItem utilisateurItem = new SidebarItem("Utilisateurs", "src/img/etude.png");
         SidebarItem interventionItem = new SidebarItem("Intervention", "src/img/etude.png");
         SidebarItem settingItem = new SidebarItem("Réglages", "src/img/etude.png");
 
@@ -24,7 +24,7 @@ public class Sidebar extends JPanel {
 
         //set padding
         dashboardItem.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        UtilisateurItem.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        utilisateurItem.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         interventionItem.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         settingItem.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -33,11 +33,11 @@ public class Sidebar extends JPanel {
         //setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         //set height 100% of window
-        setMaximumSize(new Dimension(100, Integer.MAX_VALUE));
+        setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
 
         //add on click listener to each item
         dashboardItem.addMouseListener(new SidebarItemListener("dashboard"));
-        UtilisateurItem.addMouseListener(new SidebarItemListener("utilisateur"));
+        utilisateurItem.addMouseListener(new SidebarItemListener("utilisateur"));
         interventionItem.addMouseListener(new SidebarItemListener("intervention"));
         settingItem.addMouseListener(new SidebarItemListener("setting"));
 
@@ -47,7 +47,7 @@ public class Sidebar extends JPanel {
 
         add(dashboardItem);
         add(interventionItem);
-        add(UtilisateurItem);
+        add(utilisateurItem);
         add(settingItem);
         setVisible(true);
     }
