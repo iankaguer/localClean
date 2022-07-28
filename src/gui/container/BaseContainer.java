@@ -25,6 +25,7 @@ public class BaseContainer extends JPanel {
         sidebar.setSize(new Dimension(200, Integer.MAX_VALUE));
 
         mainContainer.setSize(new Dimension((Integer.MAX_VALUE - 200), Integer.MAX_VALUE));
+        mainContainer.setBorder(BorderFactory.createEmptyBorder(35, 35, 35, 35));
         //sidebar.setBackground(Color.WHITE);
 
         add(sidebar);

@@ -10,6 +10,9 @@ public class Intervention {
     private final double longitude;
     private final double latitude;
 
+    private String date = "";
+    private String status = "";
+
     public Intervention(int id, String name, String email, String address, String phone, String image, double longitude, double latitude) {
         this.id = id;
         this.name = name;
@@ -44,6 +47,19 @@ public class Intervention {
     }
     public double getLatitude() {
         return latitude;
+    }
+
+    public String getDate() {
+        return date;
+    }
+    public String getStatus() {
+        return status;
+    }
+    public void setDate(String date) {
+        this.date = date;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 

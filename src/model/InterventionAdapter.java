@@ -41,6 +41,7 @@ public class InterventionAdapter {
 
 
         }
+        //System.out.println(interventions.size() + " taille");
         return interventions;
     }
 }
