@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="no.tornado.databinding.jxdatepicker.support" type="repository">
+    <properties maven-id="no.tornado.databinding:jxdatepicker-support:1.0" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jxdatepicker-support-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/databinding-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-beanutils-core-1.8.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-logging-1.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/swingx-1.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/filters-2.0.235.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/swing-worker-1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,12 +1,14 @@
 package gui.container;
 
 import model.InterventionAdapter;
+import org.jdesktop.swingx.JXDatePicker;
 import org.jxmapviewer.JXMapKit;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
+import utils.DateLabelFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,8 +22,10 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class Intervention extends JPanel {
@@ -45,7 +49,7 @@ public class Intervention extends JPanel {
 
 
         String[] colNames = new String[]{
-                "Identifiant","Nom", "Adresse", "Telephone", "Email", "Latitude", "Longitude"
+                "Identifiant","Nom", "Adresse", "Telephone", "Email", "Latitude", "Longitude", "Date"
         };
         String[][] data = new String[list.size()][colNames.length];
         for (int i = 0; i < list.size(); i++) {
@@ -56,10 +60,12 @@ public class Intervention extends JPanel {
             data[i][4] = list.get(i).getEmail();
             data[i][5] = String.valueOf(list.get(i).getLatitude());
             data[i][6] = String.valueOf(list.get(i).getLongitude());
+            data[i][7] = String.valueOf(list.get(i).getDate());
 
         }
 
         JTable table = new JTable(data,colNames);
+        table.setAutoCreateRowSorter(true);
 
         final JScrollPane scrollPane = new JScrollPane(table);
 
@@ -76,6 +82,9 @@ public class Intervention extends JPanel {
         });
 
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        Dimension d = table.getPreferredSize();
+        scrollPane.setPreferredSize(
+                new Dimension(d.width,table.getRowHeight()*13));
         final JButton next = new JButton("next");
         final JButton prev = new JButton("prev");
 
@@ -100,8 +109,8 @@ public class Intervention extends JPanel {
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(prev);
         buttonPanel.add(next);
-        panel.add(buttonPanel, BorderLayout.CENTER);
-        panel.add(scrollPane, BorderLayout.NORTH);
+        panel.add(buttonPanel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
 
 
         JPanel panelNom = new JPanel(new BorderLayout());
@@ -115,13 +124,15 @@ public class Intervention extends JPanel {
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         jXMapKit.setTileFactory(tileFactory);
+        //set height of jXMapKit
+        jXMapKit.setSize(new Dimension(300, 200));
         tooltip = new JToolTip();
         setMapData();
         jXMapKit.getMainMap().addMouseMotionListener(new MouseMotionListener() {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                // ignore
+                //ignore
             }
 
             @Override
@@ -152,37 +163,77 @@ public class Intervention extends JPanel {
         panelMap.add(jXMapKit, BorderLayout.CENTER);
         panelImage.add(imageLabel, BorderLayout.CENTER);
 
+        //create a input type date and add it to the panel
+        JPanel panelDate = new JPanel(new BorderLayout());
+        JLabel labelDate = new JLabel("Date : ");
+
+        JXDatePicker picker = new JXDatePicker();
+        picker.setDate(Calendar.getInstance().getTime());
+        picker.setFormats(new SimpleDateFormat("dd-MM-yyyy"));
+
+        JSpinner timeSpinner = new JSpinner( new SpinnerDateModel() );
+        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm:ss");
+        timeSpinner.setEditor(timeEditor);
+        timeSpinner.setValue(new Date());
+
+        panelDate.add(labelDate, BorderLayout.WEST);
+        panelDate.add(picker, BorderLayout.CENTER);
+        panelDate.add(timeSpinner, BorderLayout.EAST);
 
         JPanel selectedPanel = new JPanel();
-        selectedPanel.setLayout(new GridBagLayout());
+        selectedPanel.setLayout(new GridLayout(1, 3));
 
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.fill = GridBagConstraints.BOTH;
-        selectedPanel.add(panelNom, c);
-        c.gridx = 1;
-        selectedPanel.add(panelAdresse, c);
-        c.gridx = 0;
-        c.gridy = 1;
-        selectedPanel.add(panelTelephone, c);
-        c.gridy = 1;
-        selectedPanel.add(panelEmail, c);
-        c.gridx = 0;
-        c.gridy = 2;
-        c.ipady = 100;
-        selectedPanel.add(panelMap, c);
-        c.gridx = 1;
-        c.gridy = 2;
-        c.ipady = 1;
-        selectedPanel.add(panelImage, c);
+        JPanel selectedInfoPanel = new JPanel();
+        selectedInfoPanel.setLayout(new GridLayout(16, 1));
+        selectedInfoPanel.add(panelNom);
+        selectedInfoPanel.add(panelAdresse);
+        selectedInfoPanel.add(panelTelephone);
+        selectedInfoPanel.add(panelEmail);
+        selectedInfoPanel.add(panelDate);
+        //create button save and add it to the panel
+        JPanel panelButton = new JPanel();
+        JButton buttonSave = new JButton("Enregistrer");
+        buttonSave.addActionListener(new ActionListener() {
 
-
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Calendar cals = Calendar.getInstance();
+                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+                formater.format(picker.getDate());
+                String date = formater.format(cals.getTime());
+                //get time in format HH:mm:ss from timeSpinner
+                SimpleDateFormat formater2 = new SimpleDateFormat("HH:mm:ss");
+                formater2.format(timeSpinner.getValue());
+                String time = formater2.format(cals.getTime());
 
 
-        panel.add(selectedPanel);
+
+                //System.out.println(formater.format(cals.getTime()));
+                selectedIntervention.setDate(date + " " + time);
+                //refresh table
+                if (table.getSelectedRow() == -1) {
+                    table.setRowSelectionInterval(0, 0);
+                }
+                table.setValueAt(selectedIntervention.getDate(), table.getSelectedRow(), 7);
+                //System.out.println(table.getSelectedRow());
+            }
+        });
+        panelButton.add(buttonSave);
+        selectedInfoPanel.add(panelButton);
+
+
+        selectedPanel.add(selectedInfoPanel);
+        selectedPanel.add(panelImage);
+        selectedPanel.add(panelMap);
+
+
+
+
+
+
+
+
+        panel.add(selectedPanel, BorderLayout.SOUTH);
         add(panel);
         renderFormComponent();
 
@@ -201,7 +252,7 @@ public class Intervention extends JPanel {
     public void setMapData() {
         geoPosition = new GeoPosition(selectedIntervention.getLatitude(), selectedIntervention.getLongitude());
         jXMapKit.getMainMap().setCenterPosition(geoPosition);
-        jXMapKit.getMainMap().setZoom(15);
+        jXMapKit.getMainMap().setZoom(6);
         jXMapKit.getMainMap().setAddressLocation(geoPosition);
         jXMapKit.getMainMap().setToolTipText(selectedIntervention.getName());
         tooltip.setTipText(selectedIntervention.getName());
@@ -215,6 +266,7 @@ public class Intervention extends JPanel {
             imageLabel.setIcon(new ImageIcon(image));
         }
         catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
