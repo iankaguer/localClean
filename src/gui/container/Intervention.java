@@ -8,14 +8,10 @@ import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
-import utils.DateLabelFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -69,14 +65,12 @@ public class Intervention extends JPanel {
 
         final JScrollPane scrollPane = new JScrollPane(table);
 
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-            public void valueChanged(ListSelectionEvent event) {
-                //System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
-                for (model.Intervention intervention : list) {
-                    if (intervention.getId() == Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())) {
-                        selectedIntervention = intervention;
-                        renderFormComponent();
-                    }
+        table.getSelectionModel().addListSelectionListener(event -> {
+            //System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
+            for (model.Intervention intervention : list) {
+                if (intervention.getId() == Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString())) {
+                    selectedIntervention = intervention;
+                    renderFormComponent();
                 }
             }
         });
@@ -85,21 +79,19 @@ public class Intervention extends JPanel {
         Dimension d = table.getPreferredSize();
         scrollPane.setPreferredSize(
                 new Dimension(d.width,table.getRowHeight()*13));
-        final JButton next = new JButton("next");
-        final JButton prev = new JButton("prev");
+        final JButton next = new JButton("Suivant >>");
+        final JButton prev = new JButton("<< Précédent");
 
-        ActionListener al = new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                Rectangle rect = scrollPane.getVisibleRect();
-                JScrollBar  bar = scrollPane.getVerticalScrollBar();
-                int blockIncr = scrollPane.getViewport().getViewRect().height;
-                if (e.getSource() == next) {
-                    bar.setValue(bar.getValue() + blockIncr);
-                } else if (e.getSource() == prev) {
-                    bar.setValue(bar.getValue() - blockIncr);
-                }
-                scrollPane.scrollRectToVisible(rect);
+        ActionListener al = e -> {
+            Rectangle rect = scrollPane.getVisibleRect();
+            JScrollBar  bar = scrollPane.getVerticalScrollBar();
+            int blockIncr = scrollPane.getViewport().getViewRect().height;
+            if (e.getSource() == next) {
+                bar.setValue(bar.getValue() + blockIncr);
+            } else if (e.getSource() == prev) {
+                bar.setValue(bar.getValue() - blockIncr);
             }
+            scrollPane.scrollRectToVisible(rect);
         };
 
         next.addActionListener(al);
@@ -193,30 +185,26 @@ public class Intervention extends JPanel {
         //create button save and add it to the panel
         JPanel panelButton = new JPanel();
         JButton buttonSave = new JButton("Enregistrer");
-        buttonSave.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Calendar cals = Calendar.getInstance();
-                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-                formater.format(picker.getDate());
-                String date = formater.format(cals.getTime());
-                //get time in format HH:mm:ss from timeSpinner
-                SimpleDateFormat formater2 = new SimpleDateFormat("HH:mm:ss");
-                formater2.format(timeSpinner.getValue());
-                String time = formater2.format(cals.getTime());
+        buttonSave.addActionListener(e -> {
+            Calendar cals = Calendar.getInstance();
+            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+            formater.format(picker.getDate());
+            String date = formater.format(cals.getTime());
+            //get time in format HH:mm:ss from timeSpinner
+            SimpleDateFormat formater2 = new SimpleDateFormat("HH:mm:ss");
+            formater2.format(timeSpinner.getValue());
+            String time = formater2.format(cals.getTime());
 
 
 
-                //System.out.println(formater.format(cals.getTime()));
-                selectedIntervention.setDate(date + " " + time);
-                //refresh table
-                if (table.getSelectedRow() == -1) {
-                    table.setRowSelectionInterval(0, 0);
-                }
-                table.setValueAt(selectedIntervention.getDate(), table.getSelectedRow(), 7);
-                //System.out.println(table.getSelectedRow());
+            //System.out.println(formater.format(cals.getTime()));
+            selectedIntervention.setDate(date + " " + time);
+            //refresh table
+            if (table.getSelectedRow() == -1) {
+                table.setRowSelectionInterval(0, 0);
             }
+            table.setValueAt(selectedIntervention.getDate(), table.getSelectedRow(), 7);
+            //System.out.println(table.getSelectedRow());
         });
         panelButton.add(buttonSave);
         selectedInfoPanel.add(panelButton);
