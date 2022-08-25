@@ -1,7 +1,6 @@
 package gui.container;
 
-import model.Intervention;
-import model.InterventionAdapter;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,25 +9,22 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Utilisateur extends JPanel {
-    public Utilisateur() {
+    public Utilisateur(ArrayList<model.Intervention> listIntervention) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(new JLabel("Intervention"));
-
-        InterventionAdapter adapter = new InterventionAdapter();
-        ArrayList<Intervention> list = adapter.listInterventions();
 
 
         String[] colNames = new String[]{
                 "Nom", "Adresse", "Telephone", "Email", "Latitude", "Longitude"
         };
-        String[][] data = new String[list.size()][colNames.length];
-        for (int i = 0; i < list.size(); i++) {
-            data[i][0] = list.get(i).getName();
-            data[i][1] = list.get(i).getAddress();
-            data[i][2] = list.get(i).getPhone();
-            data[i][3] = list.get(i).getEmail();
-            data[i][4] = String.valueOf(list.get(i).getLatitude());
-            data[i][5] = String.valueOf(list.get(i).getLongitude());
+        String[][] data = new String[listIntervention.size()][colNames.length];
+        for (int i = 0; i < listIntervention.size(); i++) {
+            data[i][0] = listIntervention.get(i).getName();
+            data[i][1] = listIntervention.get(i).getAddress();
+            data[i][2] = listIntervention.get(i).getPhone();
+            data[i][3] = listIntervention.get(i).getEmail();
+            data[i][4] = String.valueOf(listIntervention.get(i).getLatitude());
+            data[i][5] = String.valueOf(listIntervention.get(i).getLongitude());
 
         }
 

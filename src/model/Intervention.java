@@ -10,6 +10,7 @@ public class Intervention {
     private final double longitude;
     private final double latitude;
 
+    private String partner = "";
     private String date = "";
     private String status = "";
 
@@ -60,6 +61,13 @@ public class Intervention {
     }
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPartner() {
+        return partner;
+    }
+    public void setPartner(String partner) {
+        this.partner = partner;
     }
 
 

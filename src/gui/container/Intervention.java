@@ -8,6 +8,7 @@ import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
+import utils.Basic;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -30,16 +31,19 @@ public class Intervention extends JPanel {
     JXMapKit jXMapKit;
     GeoPosition geoPosition;
     JToolTip tooltip ;
-    public Intervention() {
+    ArrayList<model.Intervention> list;
+    public Intervention(ArrayList<model.Intervention> listIntervention) {
         labelNom = new JLabel("Nom : ");
         labelEmail = new JLabel("Email : ");
         labelTelephone = new JLabel("Telephone : ");
         labelAdresse = new JLabel("Adresse : ");
         imageLabel = new JLabel();
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new GridBagLayout());
 
-        InterventionAdapter adapter = new InterventionAdapter();
-        ArrayList<model.Intervention> list = adapter.listInterventions();
+
+
+
+        list = listIntervention;
 
         selectedIntervention = list.get(0);
 
@@ -76,11 +80,11 @@ public class Intervention extends JPanel {
         });
 
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        Dimension d = table.getPreferredSize();
-        scrollPane.setPreferredSize(
-                new Dimension(d.width,table.getRowHeight()*13));
-        final JButton next = new JButton("Suivant >>");
-        final JButton prev = new JButton("<< Précédent");
+        Dimension d = table.getSize();
+        /*scrollPane.setSize(
+                new Dimension(d.width,table.getRowHeight()*13));*/
+        final JButton next = Basic.FlatButton("Suivant >>");
+        final JButton prev = Basic.FlatButton("<< Précédent");
 
         ActionListener al = e -> {
             Rectangle rect = scrollPane.getVisibleRect();
@@ -97,12 +101,15 @@ public class Intervention extends JPanel {
         next.addActionListener(al);
         prev.addActionListener(al);
 
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JPanel scrollPanel = new JPanel(new BorderLayout());
+        scrollPanel.add(scrollPane, BorderLayout.CENTER);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(prev);
         buttonPanel.add(next);
-        panel.add(buttonPanel, BorderLayout.NORTH);
-        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(buttonPanel);
+        panel.add(scrollPanel);
 
 
         JPanel panelNom = new JPanel(new BorderLayout());
@@ -148,12 +155,15 @@ public class Intervention extends JPanel {
             }
         });
 
+        //set jsmapkit height and width
+        jXMapKit.setSize(new Dimension(100, 100));
+
         panelNom.add(labelNom, BorderLayout.WEST);
         panelAdresse.add(labelAdresse, BorderLayout.WEST);
         panelTelephone.add(labelTelephone, BorderLayout.WEST);
         panelEmail.add(labelEmail, BorderLayout.WEST);
-        panelMap.add(jXMapKit, BorderLayout.CENTER);
-        panelImage.add(imageLabel, BorderLayout.CENTER);
+        panelMap.add(jXMapKit);
+        panelImage.add(imageLabel);
 
         //create a input type date and add it to the panel
         JPanel panelDate = new JPanel(new BorderLayout());
@@ -168,12 +178,22 @@ public class Intervention extends JPanel {
         timeSpinner.setEditor(timeEditor);
         timeSpinner.setValue(new Date());
 
+
+        //add combobox to the panel
+        JPanel panelPartner = new JPanel(new BorderLayout());
+        JLabel labelType = new JLabel("Type : ");
+        String[] partnersString = { "ColabCleaner", "Le Nettoyeur", "Total Clean", "Cleanify", "Propre Espace" };
+        JComboBox<String> comboBox = new JComboBox<>(partnersString);
+        comboBox.setSelectedIndex(0);
+        panelPartner.add(labelType, BorderLayout.WEST);
+        panelPartner.add(comboBox, BorderLayout.EAST);
+        
+
         panelDate.add(labelDate, BorderLayout.WEST);
         panelDate.add(picker, BorderLayout.CENTER);
         panelDate.add(timeSpinner, BorderLayout.EAST);
 
-        JPanel selectedPanel = new JPanel();
-        selectedPanel.setLayout(new GridLayout(1, 3));
+        //JPanel selectedPanel = new JPanel();
 
         JPanel selectedInfoPanel = new JPanel();
         selectedInfoPanel.setLayout(new GridLayout(16, 1));
@@ -182,9 +202,10 @@ public class Intervention extends JPanel {
         selectedInfoPanel.add(panelTelephone);
         selectedInfoPanel.add(panelEmail);
         selectedInfoPanel.add(panelDate);
+        selectedInfoPanel.add(panelPartner);
         //create button save and add it to the panel
         JPanel panelButton = new JPanel();
-        JButton buttonSave = new JButton("Enregistrer");
+        JButton buttonSave = Basic.FlatButton("Enregistrer");
         buttonSave.addActionListener(e -> {
             Calendar cals = Calendar.getInstance();
             SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
@@ -209,20 +230,30 @@ public class Intervention extends JPanel {
         panelButton.add(buttonSave);
         selectedInfoPanel.add(panelButton);
 
-
+        JPanel selectedPanel = new JPanel();
+        selectedPanel.setLayout(new GridLayout(1, 3));
         selectedPanel.add(selectedInfoPanel);
-        selectedPanel.add(panelImage);
         selectedPanel.add(panelMap);
+        selectedPanel.add(panelImage);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+
+        gbc.fill = GridBagConstraints.BOTH;
+        //gbc.anchor = GridBagConstraints.CENTER;
+
+        gbc.insets = new Insets(10, 10, 10, 10);
+        add(panel, gbc);
+        gbc.weightx = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(selectedPanel, gbc);
 
 
 
 
 
-
-
-
-        panel.add(selectedPanel, BorderLayout.SOUTH);
-        add(panel);
         renderFormComponent();
 
 
